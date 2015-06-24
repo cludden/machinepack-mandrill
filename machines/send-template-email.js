@@ -12,17 +12,12 @@ module.exports = {
       extendedDescription: 'To look up your API key, log in to your Mandrill account and visit the settings page (https://mandrillapp.com/settings/).',
       required: true
     },
-    toEmail: {
-      friendlyName: 'To (email)',
-      example: 'jane@example.com',
-      description: 'Email address of the primary recipient.',
+    to: {
+      friendlyName: 'To',
+      description: 'An array of recipients to send the email to.',
+      //example: [{email: 'email@email.com', name: 'Optional Name'}], // not sure how to implement an optional object attribute
+      typeclass: 'array',
       required: true
-    },
-    toName: {
-      friendlyName: 'To (name)',
-      example: 'Jane Doe',
-      description: 'Full name of the primary recipient.',
-      extendedDescription: 'If left blank, defaults to the recipient\'s email address.'
     },
     subject: {
       friendlyName: 'Subject',
@@ -34,6 +29,11 @@ module.exports = {
       description: "The template's name",
       example: 'myTemplate',
       required: true
+    },
+    content: {
+      friendlyName: 'Global Merge Values',
+      description: 'Global merge variables to use for all recipients. You can override these per recipient.',
+      typeclass: 'array'
     },
     templateContent: {
       friendlyName: 'Data',
@@ -87,10 +87,7 @@ module.exports = {
         template_name: inputs.templateName,
         template_content: inputs.templateContent,
         message: {
-          to: [{
-            email: inputs.toEmail,
-            name: inputs.toName || inputs.toEmail
-          }],
+          to: inputs.to,
           text: inputs.message || '',
           subject: inputs.subject,
           from_email: inputs.fromEmail,
@@ -99,6 +96,7 @@ module.exports = {
             rcpt: inputs.toEmail,
             vars: inputs.mergeVars
           }],
+          global_merge_vars: inputs.content,
           auto_html: true
         }
       },
