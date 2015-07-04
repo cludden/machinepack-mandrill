@@ -12,11 +12,23 @@ module.exports = {
       extendedDescription: 'To look up your API key, log in to your Mandrill account and visit the settings page (https://mandrillapp.com/settings/).',
       required: true
     },
+    toEmail: {
+      friendlyName: 'To (email)',
+      example: 'jane@example.com',
+      description: 'Email address of the primary recipient.',
+      required: true
+    },
+    toName: {
+      friendlyName: 'To (name)',
+      example: 'Jane Doe',
+      description: 'Full name of the primary recipient.',
+      extendedDescription: 'If left blank, defaults to the recipient\'s email address.'
+    },
     to: {
       friendlyName: 'To',
-      description: 'An array of recipients to send the email to.',
-      //example: [{email: 'email@email.com', name: 'Optional Name'}], // not sure how to implement an optional object attribute
-      typeclass: 'array',
+      description: 'An array of recipients to send the email to, in the form of [{email: ' +
+      '\'example@example.com\', name: \'Optional Name\'}]',
+      example: [{email: 'string'}],
       required: true
     },
     subject: {
@@ -30,7 +42,7 @@ module.exports = {
       example: 'myTemplate',
       required: true
     },
-    content: {
+    globalMergeVars: {
       friendlyName: 'Global Merge Values',
       description: 'Global merge variables to use for all recipients. You can override these per recipient.',
       typeclass: 'array'
@@ -87,7 +99,10 @@ module.exports = {
         template_name: inputs.templateName,
         template_content: inputs.templateContent,
         message: {
-          to: inputs.to,
+          to: inputs.to ? inputs.to : [{
+            email: inputs.toEmail,
+            name: inputs.toName || inputs.toEmail
+          }],
           text: inputs.message || '',
           subject: inputs.subject,
           from_email: inputs.fromEmail,
@@ -96,7 +111,7 @@ module.exports = {
             rcpt: inputs.toEmail,
             vars: inputs.mergeVars
           }],
-          global_merge_vars: inputs.content,
+          global_merge_vars: inputs.globalMergeVars,
           auto_html: true
         }
       },
