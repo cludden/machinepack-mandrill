@@ -44,7 +44,7 @@ module.exports = {
     globalMergeVars: {
       friendlyName: 'Global Merge Values',
       description: 'Global merge variables to use for all recipients. You can override these per recipient.',
-      typeclass: 'array'
+      example: [{'name': 'of variable', 'content': 'value'}]
     },
     templateContent: {
       friendlyName: 'Data',
