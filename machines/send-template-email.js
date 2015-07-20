@@ -15,8 +15,7 @@ module.exports = {
     toEmail: {
       friendlyName: 'To (email)',
       example: 'jane@example.com',
-      description: 'Email address of the primary recipient.',
-      required: true
+      description: 'Email address of the primary recipient.'
     },
     toName: {
       friendlyName: 'To (name)',
